@@ -1,5 +1,5 @@
 import React, {useCallback} from 'react';
-import {FlatList, Text, TouchableOpacity, StyleSheet} from 'react-native';
+import {View, FlatList, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
 const BUTTON_DATA = [
@@ -7,9 +7,22 @@ const BUTTON_DATA = [
     title: 'LoopingViewPager',
     sceneName: 'LoopingScene',
   },
+  {
+    title: 'FoldingList',
+    sceneName: 'FoldingListScene',
+  },
+  {
+    title: 'Width Pager',
+    sceneName: 'WidthPagerScene',
+  },
+  {
+    title: 'Infinity List',
+    sceneName: 'InfinityListScene',
+  },
 ];
 
 const keyExtractor = ({index, title}) => `${title}_${index}`;
+const ItemSeparatorComponent = () => <View style={styles.dividerStyle} />;
 
 const MainScene = ({navigation}) => {
   const onPress = useCallback(
@@ -18,6 +31,7 @@ const MainScene = ({navigation}) => {
     },
     [navigation],
   );
+
   const makeButton = useCallback(
     ({item}) => {
       const {title, sceneName} = item;
@@ -40,6 +54,7 @@ const MainScene = ({navigation}) => {
         data={BUTTON_DATA}
         renderItem={makeButton}
         keyExtractor={keyExtractor}
+        ItemSeparatorComponent={ItemSeparatorComponent}
       />
     </SafeAreaView>
   );
@@ -67,5 +82,10 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 15,
     color: 'black',
+  },
+  dividerStyle: {
+    width: '100%',
+    height: 1,
+    backgroundColor: 'black',
   },
 });
