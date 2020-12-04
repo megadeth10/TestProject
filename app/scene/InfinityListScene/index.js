@@ -1,43 +1,51 @@
-import React, {useRef, useState, useCallback, useEffect} from 'react';
-import {StyleSheet, View, Dimensions, Text} from 'react-native';
+import React, {useRef, useCallback, useEffect} from 'react';
+import {StyleSheet, View, RefreshControl, Text} from 'react-native';
 
-import Globals from '../../constance/Globals';
 import SimpleTitleBar from '../../component/titlebar/SimpleTitleBar';
 import MoreDataList from '../../component/list/MoreDataList';
 
 const ITEMS = [
   {
-    itemName: 'ItemB-1',
+    itemName: 'ItemB-',
   },
   {
-    itemName: 'ItemB-2',
+    itemName: 'ItemB-',
   },
   {
-    itemName: 'ItemB-3',
+    itemName: 'ItemB-',
   },
   {
-    itemName: 'ItemB-4',
+    itemName: 'ItemB-',
   },
   {
-    itemName: 'ItemB-5',
+    itemName: 'ItemB-',
   },
   {
-    itemName: 'ItemB-6',
+    itemName: 'ItemB-',
   },
   {
-    itemName: 'ItemB-7',
+    itemName: 'ItemB-',
   },
   {
-    itemName: 'ItemB-8',
+    itemName: 'ItemB-',
   },
   {
-    itemName: 'ItemB-9',
+    itemName: 'ItemB-',
   },
   {
-    itemName: 'ItemB-10',
+    itemName: 'ItemB-',
   },
 ];
+
+const wait = (timeout) => {
+  return new Promise((resolve) => {
+    setTimeout(resolve, timeout);
+  });
+};
+
 const InfinityListScene = ({navigation}) => {
+  const [refreshing, setRefreshing] = React.useState(false);
+  const listRef = useRef();
   useEffect(() => {
     return () => {};
   }, []);
@@ -45,10 +53,12 @@ const InfinityListScene = ({navigation}) => {
   const renderItem = useCallback((params) => {
     const {
       item: {itemName},
+      index,
     } = params;
+    const text = `${itemName}${index}`;
     return (
       <View style={styles.itemStyle}>
-        <Text style={styles.textStyle}>{itemName}</Text>
+        <Text style={styles.textStyle}>{text}</Text>
       </View>
     );
   }, []);
@@ -57,14 +67,34 @@ const InfinityListScene = ({navigation}) => {
     return Promise.resolve({data: ITEMS});
   }, []);
 
+  const getData = useCallback(async () => {
+    await wait(2000);
+    return {data: ITEMS};
+  }, []);
+
+  const resetListData = useCallback(() => {
+    setRefreshing(true);
+
+    wait(2000).then(() => {
+      setRefreshing(false);
+      listRef.current?.resetData();
+    });
+  }, []);
+
+  const renderRefreshControl = useCallback(() => {
+    return <RefreshControl refreshing={refreshing} onRefresh={resetListData} />;
+  }, [refreshing, resetListData]);
+
   return (
     <View style={styles.rootView}>
       <SimpleTitleBar title="infinity List" navigation={navigation} />
       <MoreDataList
+        ref={listRef}
         style={styles.rootView}
         startPageNumber={0}
         renderItem={renderItem}
-        getData={addListData}
+        getData={getData}
+        refreshControl={renderRefreshControl()}
       />
     </View>
   );

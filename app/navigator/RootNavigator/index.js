@@ -8,6 +8,7 @@ import LoopingScene from '../../scene/LoopingScene';
 import FoldingListScene from '../../scene/FoldingListScene';
 import WidthPagerScene from '../../scene/WidthPagerScene';
 import InfinityListScene from '../../scene/InfinityListScene';
+import IndicatorImageScene from '../../scene/IndicatorImageScene';
 
 const getDefaultScreenProps = (name, component, extraProps = {}) => (
   <Stack.Screen name={name} component={component} {...extraProps} />
@@ -35,6 +36,8 @@ const RootStackNavigator = () => (
     {getDefaultScreenProps('FoldingListScene', FoldingListScene)}
     {getDefaultScreenProps('WidthPagerScene', WidthPagerScene)}
     {getDefaultScreenProps('InfinityListScene', InfinityListScene)}
+    {getDefaultScreenProps('IndicatorImageScene', IndicatorImageScene)}
+    
   </Stack.Navigator>
 );
 

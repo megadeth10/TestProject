@@ -19,6 +19,10 @@ const BUTTON_DATA = [
     title: 'Infinity List',
     sceneName: 'InfinityListScene',
   },
+  {
+    title: 'Loading Image',
+    sceneName: 'IndicatorImageScene',
+  },
 ];
 
 const keyExtractor = ({index, title}) => `${title}_${index}`;
